@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CombatEntity : PhysicsEntity
+public abstract class CombatEntity : PhysicsEntity
 {
     #region Base Stats
     public float Hp { get; protected set; }
@@ -21,6 +21,8 @@ public class CombatEntity : PhysicsEntity
     public float CurrentRes { get; protected set; }
     public float CurrentSpd { get; protected set; }
     #endregion
+
+    public abstract void SetBaseStats(CombatEntityData data);
 
     public virtual void ApplyPhysicalDmg(float dmg, float defIgnored = 0)
     {

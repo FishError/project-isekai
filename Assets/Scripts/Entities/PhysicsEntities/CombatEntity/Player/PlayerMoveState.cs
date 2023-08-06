@@ -12,7 +12,7 @@ public class PlayerMoveState : PlayerGroundedState
     public override void Enter()
     {
         base.Enter();
-        Player.rb.velocity = new Vector3(Player.playerInput.movementInput.x * 5, Player.rb.velocity.y);
+        Player.rb.velocity = new Vector2(Player.playerInput.movementInput.x * 5, Player.rb.velocity.y);
     }
 
     public override void Exit()
@@ -40,7 +40,7 @@ public class PlayerMoveState : PlayerGroundedState
         base.PhysicsUpdate();
         if (Player.playerInput.movementInput.x != 0)
         {
-            Player.rb.velocity = new Vector3(Player.playerInput.movementInput.x * 5, Player.rb.velocity.y);
+            Player.rb.velocity = new Vector2(Player.playerInput.movementInput.x * 5, Player.rb.velocity.y);
         }
     }
 }

@@ -27,4 +27,9 @@ public class Player : ComplexCombatEntity
         AirBorneState = new PlayerAirBorneState(this);
         CurrentState = IdleState;
     }
+
+    public override void SetBaseStats(CombatEntityData data)
+    {
+        throw new System.NotImplementedException();
+    }
 }

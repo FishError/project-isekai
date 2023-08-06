@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerGroundedState : PlayerState
+public class BasicEnemyGroundedState : BasicEnemyState
 {
-    public PlayerGroundedState(Player player) : base(player)
+    public BasicEnemyGroundedState(BasicEnemy basicEnemy) : base(basicEnemy)
     {
 
     }
@@ -22,11 +22,5 @@ public class PlayerGroundedState : PlayerState
     public override void PhysicsUpdate()
     {
         
-    }
-
-    public override void OnJump()
-    {
-        //Player.rb.isKinematic = false;
-        Player.velocities.Add(new Vector2(0, 5));
     }
 }
