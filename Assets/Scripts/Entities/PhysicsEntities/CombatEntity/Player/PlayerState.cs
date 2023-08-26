@@ -12,4 +12,6 @@ public abstract class PlayerState : EntityState
     }
 
     public abstract void OnJump();
+
+    public abstract void OnMove(Vector2 moveInput);
 }

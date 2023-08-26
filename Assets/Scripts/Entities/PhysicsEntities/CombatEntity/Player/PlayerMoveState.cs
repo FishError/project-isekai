@@ -38,9 +38,6 @@ public class PlayerMoveState : PlayerGroundedState
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
-        if (Player.playerInput.movementInput.x != 0)
-        {
-            Player.rb.velocity = new Vector2(Player.playerInput.movementInput.x * 5, Player.rb.velocity.y);
-        }
+        Player.rb.velocity = new Vector2(Player.playerInput.movementInput.x * 5, Player.rb.velocity.y);
     }
 }

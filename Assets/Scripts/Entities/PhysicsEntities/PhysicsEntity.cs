@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem.HID;
 
 public class PhysicsEntity : Entity
 {
-    public float gravity = 9.81f;
+    public float gravity { get;  protected set; } = 9.81f;
 
     public Vector2 tempVelocity;
     public List<Vector2> velocities;
@@ -20,12 +21,16 @@ public class PhysicsEntity : Entity
         velocities = new List<Vector2>();
     }
 
+    protected virtual void Update()
+    {
+
+    }
+
     protected virtual void FixedUpdate()
     {
         CheckGrounded();
         ApplyGravity();
         CalculateNetVelocity();
-        rb.velocity = tempVelocity;
     }
 
     private void CalculateNetVelocity()
@@ -36,27 +41,43 @@ public class PhysicsEntity : Entity
             tempVelocity += velocities[i];
         }
         velocities.Clear();
+        rb.velocity = tempVelocity;
     }
 
     private void CheckGrounded()
     {
         float distance = Mathf.Abs(rb.velocity.y) * Time.fixedDeltaTime;
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, (distance < 0.015f) ? 0.015f : distance);
-        if (hit.collider != null)
+        Bounds bounds = GetComponentInChildren<BoxCollider2D>().bounds;
+        Vector3 raySpacing = new Vector3(bounds.size.x / 2, 0);
+        for (int i = 0; i < 3; i++)
         {
-            float angle = Vector2.Angle(Vector2.down, hit.normal);
+            RaycastHit2D hit = Physics2D.Raycast(bounds.min + raySpacing * i, Vector2.down, (distance < 0.05f) ? 0.05f : distance);
+            if (hit.collider != null)
+            {
+                float angle = Vector2.Angle(Vector2.down, hit.normal);
 
-            if (180 - angle < 31)
-                grounded = true;
+                if (180 - angle < 31)
+                    grounded = true;
 
-            return;
+                return;
+            }
+            grounded = false;
         }
-        grounded = false;
     }
 
     private void ApplyGravity()
     {
         if (!grounded)
             velocities.Add(gravity * Time.fixedDeltaTime * Vector2.down);
+    }
+
+    public void AdjustGravity(float updatedGravity)
+    {
+        gravity = updatedGravity;
+    }
+
+    public void ResetGravity()
+    {
+        gravity = 9.81f;
     }
 }
