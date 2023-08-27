@@ -13,13 +13,13 @@ public class PlayerIdleState : PlayerGroundedState
     {
         base.Enter();
         Player.rb.velocity = Vector3.zero;
-        Player.rb.isKinematic = true;
+        //Player.rb.isKinematic = true;
     }
 
     public override void Exit()
     {
         base.Exit();
-        Player.rb.isKinematic = false;
+        //Player.rb.isKinematic = false;
     }
 
     public override void LogicUpdate()

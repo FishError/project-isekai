@@ -16,8 +16,9 @@ public abstract class ComplexCombatEntity : CombatEntity
         SetupStateMachine();
     }
 
-    protected virtual void Update()
+    protected override void Update()
     {
+        base.Update();
         CurrentState.LogicUpdate();
     }
 

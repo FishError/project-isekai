@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // doesn't use state machine
-public class SimpleCombatEntity : CombatEntity
+public abstract class SimpleCombatEntity : CombatEntity
 {
 
 }

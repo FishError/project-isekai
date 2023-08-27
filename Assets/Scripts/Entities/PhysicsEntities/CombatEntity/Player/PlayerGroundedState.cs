@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerGroundedState : PlayerState
 {
+
     public PlayerGroundedState(Player player) : base(player)
     {
 
@@ -24,9 +25,14 @@ public class PlayerGroundedState : PlayerState
         
     }
 
+    public override void OnMove(Vector2 moveInput)
+    {
+        Player.rb.velocity = new Vector2(moveInput.x * 5, Player.rb.velocity.y);
+    }
+
     public override void OnJump()
     {
-        Player.rb.isKinematic = false;
-        Player.velocities.Add(new Vector3(0, 5));
+        Player.velocities.Add(new Vector2(0, 7));
+        Player.playerInput.isJumping = true;
     }
 }
