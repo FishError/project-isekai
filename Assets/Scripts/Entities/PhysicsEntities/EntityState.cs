@@ -16,4 +16,34 @@ public abstract class EntityState
     public abstract void LogicUpdate();
 
     public abstract void PhysicsUpdate();
+
+    public virtual void OnCollisionEnter(Collision2D collision)
+    {
+
+    }
+
+    public virtual void OnCollisionStay(Collision2D collision)
+    {
+
+    }
+
+    public virtual void OnCollisionExit(Collision2D collision)
+    {
+
+    }
+
+    public virtual void OnTriggerEnter(Collider2D collision)
+    {
+
+    }
+
+    public virtual void OnTriggerStay(Collider2D collision)
+    {
+
+    }
+
+    public virtual void OnTriggerExit(Collider2D collision)
+    {
+
+    }
 }
