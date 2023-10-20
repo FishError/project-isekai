@@ -8,12 +8,12 @@ public class CombatEntityData : ScriptableObject
     [Header("Base Stats and Growth Rates")]
     public float Hp;
     public float HpGrowthRate;
-    [Space(0)] 
+    [Space(10)] 
     public float Mp;
     public float MpGrowthRate;
-    [Space(0)]
-    public float Stamina;
-    public float StaminaGrowthRate;
+    [Space(10)]
+    public float Stm;
+    public float StmGrowthRate;
     [Space(10)]
     public float Str;
     public float StrGrowthRate;

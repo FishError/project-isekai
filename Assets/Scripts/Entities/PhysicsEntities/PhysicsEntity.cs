@@ -9,6 +9,7 @@ public class PhysicsEntity : Entity
 {
     public float gravity { get;  protected set; } = 9.81f;
     public bool grounded;
+    public LayerMask terrainLayer;
 
     public List<Vector2> velocities;
     private Vector2 tempVelocity;
@@ -34,6 +35,36 @@ public class PhysicsEntity : Entity
         CheckSlope();
     }
 
+    protected virtual void OnCollisionEnter2D(Collision2D collision)
+    {
+        
+    }
+
+    protected virtual void OnCollisionStay2D(Collision2D collision)
+    {
+
+    }
+
+    protected virtual void OnCollisionExit2D(Collision2D collision)
+    {
+
+    }
+
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
+    {
+        
+    }
+
+    protected virtual void OnTriggerStay2D(Collider2D collision)
+    {
+
+    }
+
+    protected virtual void OnTriggerExit2D(Collider2D collision)
+    {
+
+    }
+
     private void CalculateNetVelocity()
     {
         tempVelocity = rb.velocity;
@@ -53,7 +84,7 @@ public class PhysicsEntity : Entity
         RaycastHit2D hit;
         for (int i = 0; i < 3; i++)
         {
-            hit = Physics2D.Raycast(bounds.min + raySpacing * i, Vector2.down, (distance < 0.05f) ? 0.05f : distance);
+            hit = Physics2D.Raycast(bounds.min + raySpacing * i, Vector2.down, (distance < 0.05f) ? 0.05f : distance, terrainLayer);
             if (hit.collider != null)
             {
                 float angle = Vector2.Angle(Vector2.down, hit.normal);
@@ -73,9 +104,9 @@ public class PhysicsEntity : Entity
         Bounds bounds = GetComponentInChildren<BoxCollider2D>().bounds;
         RaycastHit2D hit;
         if (rb.velocity.x > 0)
-            hit = Physics2D.Raycast(bounds.min + new Vector3(bounds.size.x, 0), new Vector2(rb.velocity.x, 0), (distance < 0.05f) ? 0.05f : distance);
+            hit = Physics2D.Raycast(bounds.min + new Vector3(bounds.size.x, 0), new Vector2(rb.velocity.x, 0), (distance < 0.05f) ? 0.05f : distance, terrainLayer);
         else
-            hit = Physics2D.Raycast(bounds.min, new Vector2(rb.velocity.x, 0), (distance < 0.05f) ? 0.05f : distance);
+            hit = Physics2D.Raycast(bounds.min, new Vector3(rb.velocity.x, 0), (distance < 0.05f) ? 0.05f : distance, terrainLayer);
 
         if (hit.collider != null)
         {

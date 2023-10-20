@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public abstract class PlayerState : EntityState
 {
@@ -11,7 +12,9 @@ public abstract class PlayerState : EntityState
         Player = player;
     }
 
-    public abstract void OnJump();
+    public virtual void OnJump() { }
 
-    public abstract void OnMove(Vector2 moveInput);
+    public virtual void OnMove(InputAction.CallbackContext value) { }
+
+    public virtual void OnLeftClick() { }
 }

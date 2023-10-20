@@ -7,12 +7,20 @@ public class Player : ComplexCombatEntity
     public PlayerIdleState IdleState { get; private set; }
     public PlayerMoveState MoveState { get; private set; }
     public PlayerAirBorneState AirBorneState { get; private set; }
+    public PlayerBasicAttackState BasicAttackState { get; private set; }
 
     public PlayerInputController playerInput;
 
     protected override void Start()
     {
         base.Start();
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+        animator.SetFloat("yVelocity", rb.velocity.y);
+        animator.SetFloat("xVelocity", rb.velocity.x);
     }
 
     protected override void FixedUpdate()
@@ -25,11 +33,12 @@ public class Player : ComplexCombatEntity
         IdleState = new PlayerIdleState(this);
         MoveState = new PlayerMoveState(this);
         AirBorneState = new PlayerAirBorneState(this);
+        BasicAttackState = new PlayerBasicAttackState(this);
         CurrentState = IdleState;
     }
 
-    public override void SetBaseStats(CombatEntityData data)
+    public void ChangeStateAfterAttackAnimation()
     {
-        throw new System.NotImplementedException();
+        BasicAttackState.ChangeStateAfterAttack();
     }
 }

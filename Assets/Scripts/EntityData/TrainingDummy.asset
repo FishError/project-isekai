@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea78b951983f13c4490ba6b3573d2902, type: 3}
+  m_Name: TrainingDummy
+  m_EditorClassIdentifier: 
+  Hp: 1000
+  HpGrowthRate: 0
+  Mp: 0
+  MpGrowthRate: 0
+  Stm: 0
+  StmGrowthRate: 0
+  Str: 0
+  StrGrowthRate: 0
+  Mag: 0
+  MagGrowthRate: 0
+  Def: 0
+  DefGrowthRate: 0
+  Res: 0
+  ResGrowthRate: 0
+  Spd: 0
+  SpdGrowthRate: 0
