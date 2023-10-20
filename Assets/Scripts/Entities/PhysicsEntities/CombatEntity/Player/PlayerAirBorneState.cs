@@ -13,13 +13,13 @@ public class PlayerAirBorneState : PlayerState
     public override void Enter()
     {
         base.Enter();
-        Player.animator.SetBool("Jumping", true);
+        Player.animator.SetBool("Airborne", true);
     }
 
     public override void Exit()
     {
         Player.rb.velocity = new Vector2(Player.rb.velocity.x, 0);
-        Player.animator.SetBool("Jumping", false);
+        Player.animator.SetBool("Airborne", false);
     }
 
     public override void LogicUpdate()
