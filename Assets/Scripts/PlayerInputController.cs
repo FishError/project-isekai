@@ -23,7 +23,7 @@ public class PlayerInputController : MonoBehaviour
         movementInput = value.ReadValue<Vector2>();
         if (value.performed || value.canceled) 
         {
-            ((PlayerState)player.CurrentState).OnMove(value.ReadValue<Vector2>());
+            ((PlayerState)player.CurrentState).OnMove(value);
         }
     }
 
@@ -61,7 +61,10 @@ public class PlayerInputController : MonoBehaviour
 
     public void OnLeftClick(InputAction.CallbackContext value)
     {
-        
+        if (value.performed)
+        {
+            ((PlayerState)player.CurrentState).OnLeftClick();
+        }
     }
 
     public void OnRightClick(InputAction.CallbackContext value)

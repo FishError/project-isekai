@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerGroundedState : PlayerState
 {
@@ -25,14 +26,22 @@ public class PlayerGroundedState : PlayerState
         
     }
 
-    public override void OnMove(Vector2 moveInput)
+    public override void OnMove(InputAction.CallbackContext value)
     {
-        Player.rb.velocity = new Vector2(moveInput.x * 5, Player.rb.velocity.y);
+        base.OnMove(value);
+        Player.rb.velocity = new Vector2(value.ReadValue<Vector2>().x * Player.RelativeSpd, Player.rb.velocity.y);
     }
 
     public override void OnJump()
     {
+        base.OnJump();
         Player.velocities.Add(new Vector2(0, 7));
         Player.playerInput.isJumping = true;
+    }
+
+    public override void OnLeftClick()
+    {
+        base.OnLeftClick();
+        Player.ChangeState(Player.BasicAttackState);
     }
 }
