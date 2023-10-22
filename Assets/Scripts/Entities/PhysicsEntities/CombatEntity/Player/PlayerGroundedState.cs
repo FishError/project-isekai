@@ -29,7 +29,7 @@ public class PlayerGroundedState : PlayerState
     public override void OnMove(InputAction.CallbackContext value)
     {
         base.OnMove(value);
-        Player.rb.velocity = new Vector2(value.ReadValue<Vector2>().x * Player.RelativeSpd, Player.rb.velocity.y);
+        Player.rb.velocity = new Vector2(Player.playerInput.movementInput.x * Player.RelativeSpd, Player.rb.velocity.y);
     }
 
     public override void OnJump()
@@ -39,9 +39,9 @@ public class PlayerGroundedState : PlayerState
         Player.playerInput.isJumping = true;
     }
 
-    public override void OnLeftClick()
+    public override void OnLeftClick(Vector2 mousePos)
     {
-        base.OnLeftClick();
+        base.OnLeftClick(mousePos);
         Player.ChangeState(Player.BasicAttackState);
     }
 }

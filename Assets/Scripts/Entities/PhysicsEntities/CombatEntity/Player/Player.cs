@@ -8,8 +8,11 @@ public class Player : ComplexCombatEntity
     public PlayerMoveState MoveState { get; private set; }
     public PlayerAirBorneState AirBorneState { get; private set; }
     public PlayerBasicAttackState BasicAttackState { get; private set; }
+    public PlayerBasicAttackAirState BasicAttackAirState { get; private set; }
 
     public PlayerInputController playerInput;
+
+    public AnimationClip clip;
 
     protected override void Start()
     {
@@ -34,11 +37,19 @@ public class Player : ComplexCombatEntity
         MoveState = new PlayerMoveState(this);
         AirBorneState = new PlayerAirBorneState(this);
         BasicAttackState = new PlayerBasicAttackState(this);
+        BasicAttackAirState = new PlayerBasicAttackAirState(this);
         CurrentState = IdleState;
     }
 
     public void ChangeStateAfterAttackAnimation()
     {
-        BasicAttackState.ChangeStateAfterAttack();
+        if (animator.GetBool("BasicAttack") && grounded)
+        {
+            BasicAttackState.ChangeStateAfterAttack();
+        }
+        else if (animator.GetBool("Airborne"))
+        {
+            BasicAttackAirState.ChangeStateAfterAttack();
+        }
     }
 }

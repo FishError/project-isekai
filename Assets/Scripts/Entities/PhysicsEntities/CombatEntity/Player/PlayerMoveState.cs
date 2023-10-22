@@ -40,9 +40,7 @@ public class PlayerMoveState : PlayerGroundedState
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
-        Player.transform.localScale = new Vector3(Mathf.Sign(Player.playerInput.movementInput.x) * Mathf.Abs(Player.transform.localScale.x), 
-                                                    Player.transform.localScale.y, 
-                                                    Player.transform.localScale.z);
+        Player.FlipLocalScaleX(Mathf.Sign(Player.playerInput.movementInput.x));
         Player.rb.velocity = new Vector2(Player.playerInput.movementInput.x * Player.RelativeSpd, Player.rb.velocity.y);
     }
 }

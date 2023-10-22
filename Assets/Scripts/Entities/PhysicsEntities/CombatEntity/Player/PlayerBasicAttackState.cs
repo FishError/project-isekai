@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerBasicAttackState : PlayerGroundedState
+public class PlayerBasicAttackState : PlayerState
 {
     private bool continueCombo;
 
@@ -16,36 +17,46 @@ public class PlayerBasicAttackState : PlayerGroundedState
     {
         base.Enter();
         Player.rb.velocity = Vector2.zero;
-        Player.animator.SetBool("Attacking", true);
+        Player.FlipLocalScaleX(Mathf.Sign(Player.playerInput.leftClickPos.x - Player.transform.position.x));
+        Vector2 mousePos = Player.playerInput.leftClickPos - (Vector2)Player.transform.position;
+        Player.animator.SetBool("BasicAttack", true);
+        if (mousePos.y > Mathf.Abs(mousePos.x))
+            Player.animator.SetBool("BasicAttackUp", true);
     }
 
     public override void Exit()
     {
-        base.Exit();
-        Player.animator.SetBool("Attacking", false);
+        Player.animator.SetBool("BasicAttackUp", false);
+        Player.animator.SetBool("BasicAttack", false);
         continueCombo = false;
     }
 
     public override void LogicUpdate()
     {
-        base.LogicUpdate();
-        
+        if (!Player.grounded)
+        {
+            Player.ChangeState(Player.AirBorneState);
+            return;
+        }
     }
 
     public override void PhysicsUpdate()
     {
-        base.PhysicsUpdate();
+        
     }
 
-    public override void OnLeftClick()
+    public override void OnJump()
     {
-        base.OnLeftClick();
+        base.OnJump();
+        Player.velocities.Add(new Vector2(0, 7));
+        Player.playerInput.isJumping = true;
+    }
+
+    public override void OnLeftClick(Vector2 mousePos)
+    {
+        base.OnLeftClick(mousePos);
         continueCombo = true;
     }
-
-    public override void OnMove(InputAction.CallbackContext value) { }
-
-    public override void OnJump() { }
 
     public void ChangeStateAfterAttack()
     {
@@ -65,6 +76,16 @@ public class PlayerBasicAttackState : PlayerGroundedState
                 Player.ChangeState(Player.MoveState);
                 return;
             }
+        }
+    }
+
+    public override void OnTriggerEnter(Collider2D collision)
+    {
+        base.OnTriggerEnter(collision);
+        CombatEntity entity = collision.attachedRigidbody.GetComponent<CombatEntity>(); 
+        if (entity != null)
+        {
+            entity.ApplyPhysicalDmg(Player.CurrentStr);
         }
     }
 }
