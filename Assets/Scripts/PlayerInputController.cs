@@ -11,8 +11,10 @@ public class PlayerInputController : MonoBehaviour
     public bool isJumping;
     public float jumpHoldStartTime;
     
-    public bool leftClickInput;
-    public bool rightClickInput;
+    public Vector2 leftClickPos;
+    public Vector2 rightClickPos;
+    public Vector3 screenMousePos;
+    public Vector2 worldMousePos;
 
     public Player player;
     public Camera playerCamera;
@@ -63,12 +65,21 @@ public class PlayerInputController : MonoBehaviour
     {
         if (value.performed)
         {
-            ((PlayerState)player.CurrentState).OnLeftClick();
+            screenMousePos = Mouse.current.position.ReadValue();
+            screenMousePos.z = -Camera.main.transform.position.z;
+            leftClickPos = Camera.main.ScreenToWorldPoint(screenMousePos);
+            ((PlayerState)player.CurrentState).OnLeftClick(leftClickPos);
         }
     }
 
     public void OnRightClick(InputAction.CallbackContext value)
     {
-
+        if (value.performed)
+        {
+            screenMousePos = Mouse.current.position.ReadValue();
+            screenMousePos.z = -Camera.main.transform.position.z;
+            rightClickPos = Camera.main.ScreenToWorldPoint(screenMousePos);
+            ((PlayerState)player.CurrentState).OnLeftClick(rightClickPos);
+        }
     }
 }
