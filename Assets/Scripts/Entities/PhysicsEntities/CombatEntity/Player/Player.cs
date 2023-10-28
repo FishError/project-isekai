@@ -12,7 +12,7 @@ public class Player : ComplexCombatEntity
 
     public PlayerInputController playerInput;
 
-    public AnimationClip clip;
+    public Weapon weapon;
 
     protected override void Start()
     {
@@ -41,15 +41,9 @@ public class Player : ComplexCombatEntity
         CurrentState = IdleState;
     }
 
-    public void ChangeStateAfterAttackAnimation()
+    public void Jump()
     {
-        if (animator.GetBool("BasicAttack") && grounded)
-        {
-            BasicAttackState.ChangeStateAfterAttack();
-        }
-        else if (animator.GetBool("Airborne"))
-        {
-            BasicAttackAirState.ChangeStateAfterAttack();
-        }
+        velocities.Add(new Vector2(0, 7));
+        playerInput.IsJumping = true;
     }
 }

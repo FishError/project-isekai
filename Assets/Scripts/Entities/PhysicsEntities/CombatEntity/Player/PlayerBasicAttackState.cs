@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerBasicAttackState : PlayerState
 {
-    private bool continueCombo;
 
     public PlayerBasicAttackState(Player player) : base(player)
     {
@@ -17,18 +16,24 @@ public class PlayerBasicAttackState : PlayerState
     {
         base.Enter();
         Player.rb.velocity = Vector2.zero;
-        Player.FlipLocalScaleX(Mathf.Sign(Player.playerInput.leftClickPos.x - Player.transform.position.x));
-        Vector2 mousePos = Player.playerInput.leftClickPos - (Vector2)Player.transform.position;
-        Player.animator.SetBool("BasicAttack", true);
-        if (mousePos.y > Mathf.Abs(mousePos.x))
-            Player.animator.SetBool("BasicAttackUp", true);
+        Player.spriteRenderer.enabled = false;
+        Player.FlipLocalScaleX(Mathf.Sign(Player.playerInput.RelativeLeftClickPos.x));
+        Player.weapon.SetAnimatorBoolToFalse("Exit");
+        if (Player.playerInput.RelativeLeftClickPos.y > Mathf.Abs(Player.playerInput.RelativeLeftClickPos.x))
+        {
+            Player.weapon.SetAnimatorBoolToTrue("UpAttack");
+        }
+        else
+        {
+            Player.weapon.SetAnimatorBoolToTrue("BasicAttack");
+        }
     }
 
     public override void Exit()
     {
-        Player.animator.SetBool("BasicAttackUp", false);
-        Player.animator.SetBool("BasicAttack", false);
-        continueCombo = false;
+        Player.weapon.animator.Play("Idle");
+        Player.weapon.animator.SetBool("Exit", true);
+        Player.spriteRenderer.enabled = true;
     }
 
     public override void LogicUpdate()
@@ -48,25 +53,32 @@ public class PlayerBasicAttackState : PlayerState
     public override void OnJump()
     {
         base.OnJump();
-        Player.velocities.Add(new Vector2(0, 7));
-        Player.playerInput.isJumping = true;
+        Player.Jump();
     }
 
-    public override void OnLeftClick(Vector2 mousePos)
+    public override void OnLeftClick(Vector2 mousePos, Vector2 relativeMousePos)
     {
-        base.OnLeftClick(mousePos);
-        continueCombo = true;
-    }
-
-    public void ChangeStateAfterAttack()
-    {
-        if (continueCombo)
+        base.OnLeftClick(mousePos, relativeMousePos);
+        if (relativeMousePos.y > Mathf.Abs(relativeMousePos.x))
         {
-            Player.ChangeState(Player.BasicAttackState);
+            Player.weapon.SetAnimatorBoolToTrue("UpAttack");
         }
         else
         {
-            if (Player.playerInput.movementInput.x == 0)
+            Player.weapon.SetAnimatorBoolToTrue("BasicAttack");
+        }
+    }
+
+    public void OnAnimationEnter()
+    {
+        Player.FlipLocalScaleX(Mathf.Sign(Player.playerInput.RelativeLeftClickPos.x));
+    }
+
+    public void OnAnimationEnd()
+    {
+        if (!(Player.weapon.animator.GetBool("BasicAttack") || Player.weapon.animator.GetBool("UpAttack")))
+        {
+            if (Player.playerInput.MovementInput.x == 0)
             {
                 Player.ChangeState(Player.IdleState);
                 return;
@@ -82,10 +94,6 @@ public class PlayerBasicAttackState : PlayerState
     public override void OnTriggerEnter(Collider2D collision)
     {
         base.OnTriggerEnter(collision);
-        CombatEntity entity = collision.attachedRigidbody.GetComponent<CombatEntity>(); 
-        if (entity != null)
-        {
-            entity.ApplyPhysicalDmg(Player.CurrentStr);
-        }
+        Player.weapon.OnTriggerEnter2D(collision);
     }
 }

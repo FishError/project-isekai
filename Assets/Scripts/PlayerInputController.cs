@@ -5,16 +5,16 @@ using UnityEngine.InputSystem;
 
 public class PlayerInputController : MonoBehaviour
 {
-    public Vector3 movementInput;
+    public Vector3 MovementInput { get; private set; }
 
-    public bool jumpInput;
-    public bool isJumping;
-    public float jumpHoldStartTime;
-    
-    public Vector2 leftClickPos;
-    public Vector2 rightClickPos;
-    public Vector3 screenMousePos;
-    public Vector2 worldMousePos;
+    private float jumpHoldStartTime;
+    public bool IsJumping { get; set; }
+
+    private Vector3 screenMousePos;
+    public Vector2 LeftClickPos { get; private set; }
+    public Vector2 RelativeLeftClickPos { get; private set; }
+    public Vector2 RightClickPos { get; private set; }
+    public Vector2 RelativeRightClickPos { get; private set; }
 
     public Player player;
     public Camera playerCamera;
@@ -22,7 +22,7 @@ public class PlayerInputController : MonoBehaviour
 
     public void OnMovement(InputAction.CallbackContext value)
     {
-        movementInput = value.ReadValue<Vector2>();
+        MovementInput = value.ReadValue<Vector2>();
         if (value.performed || value.canceled) 
         {
             ((PlayerState)player.CurrentState).OnMove(value);
@@ -40,12 +40,12 @@ public class PlayerInputController : MonoBehaviour
         {
             if (Time.time - jumpHoldStartTime < 0.25f) 
             {
-                if (isJumping)
+                if (IsJumping)
                 {
                     AdjustJumpGravity(2 - (Time.time - jumpHoldStartTime) / 0.25f);
                 }
             }
-            isJumping = false;
+            IsJumping = false;
         }
     }
 
@@ -67,8 +67,9 @@ public class PlayerInputController : MonoBehaviour
         {
             screenMousePos = Mouse.current.position.ReadValue();
             screenMousePos.z = -Camera.main.transform.position.z;
-            leftClickPos = Camera.main.ScreenToWorldPoint(screenMousePos);
-            ((PlayerState)player.CurrentState).OnLeftClick(leftClickPos);
+            LeftClickPos = Camera.main.ScreenToWorldPoint(screenMousePos);
+            RelativeLeftClickPos = LeftClickPos - (Vector2)player.transform.position;
+            ((PlayerState)player.CurrentState).OnLeftClick(LeftClickPos, RelativeLeftClickPos);
         }
     }
 
@@ -78,8 +79,9 @@ public class PlayerInputController : MonoBehaviour
         {
             screenMousePos = Mouse.current.position.ReadValue();
             screenMousePos.z = -Camera.main.transform.position.z;
-            rightClickPos = Camera.main.ScreenToWorldPoint(screenMousePos);
-            ((PlayerState)player.CurrentState).OnLeftClick(rightClickPos);
+            RightClickPos = Camera.main.ScreenToWorldPoint(screenMousePos);
+            RelativeRightClickPos = RightClickPos - (Vector2)player.transform.position;
+            ((PlayerState)player.CurrentState).OnRightClick(RightClickPos, RelativeRightClickPos);
         }
     }
 }

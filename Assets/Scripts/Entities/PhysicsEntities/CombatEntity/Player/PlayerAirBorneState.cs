@@ -29,7 +29,7 @@ public class PlayerAirBorneState : PlayerState
     {
         if (Player.grounded)
         {
-            if (Player.playerInput.movementInput.x == 0)
+            if (Player.playerInput.MovementInput.x == 0)
             {
                 Player.ChangeState(Player.IdleState);
                 return;
@@ -44,7 +44,7 @@ public class PlayerAirBorneState : PlayerState
 
     public override void PhysicsUpdate()
     {
-        Player.rb.velocity = new Vector2(Player.playerInput.movementInput.x * Player.RelativeSpd, Player.rb.velocity.y);
+        Player.rb.velocity = new Vector2(Player.playerInput.MovementInput.x * Player.RelativeSpd, Player.rb.velocity.y);
     }
 
     public override void OnMove(InputAction.CallbackContext value)
@@ -52,14 +52,14 @@ public class PlayerAirBorneState : PlayerState
         base.OnMove(value);
         if (value.performed)
         {
-            Player.FlipLocalScaleX(Mathf.Sign(Player.playerInput.movementInput.x));
+            Player.FlipLocalScaleX(Mathf.Sign(Player.playerInput.MovementInput.x));
         }
-        Player.rb.velocity = new Vector2(Player.playerInput.movementInput.x * Player.RelativeSpd, Player.rb.velocity.y);
+        Player.rb.velocity = new Vector2(Player.playerInput.MovementInput.x * Player.RelativeSpd, Player.rb.velocity.y);
     }
 
-    public override void OnLeftClick(Vector2 mousePos)
+    public override void OnLeftClick(Vector2 mousePos, Vector2 relativeMousePos)
     {
-        base.OnLeftClick(mousePos);
+        base.OnLeftClick(mousePos, relativeMousePos);
         Player.ChangeState(Player.BasicAttackAirState);
     }
 }

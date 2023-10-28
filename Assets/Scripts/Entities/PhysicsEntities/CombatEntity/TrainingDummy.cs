@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TrainingDummy : CombatEntity
+public class TrainingDummy : SimpleCombatEntity
 {
     public override void ModifyHP(float amt)
     {

@@ -12,7 +12,7 @@ public class PlayerMoveState : PlayerGroundedState
     public override void Enter()
     {
         base.Enter();
-        Player.rb.velocity = new Vector2(Player.playerInput.movementInput.x * Player.RelativeSpd, Player.rb.velocity.y);
+        Player.rb.velocity = new Vector2(Player.playerInput.MovementInput.x * Player.RelativeSpd, Player.rb.velocity.y);
         Player.animator.SetBool("Running", true);
     }
 
@@ -30,7 +30,7 @@ public class PlayerMoveState : PlayerGroundedState
             Player.ChangeState(Player.AirBorneState);
             return;
         }
-        else if (Player.playerInput.movementInput.x == 0)
+        else if (Player.playerInput.MovementInput.x == 0)
         {
             Player.ChangeState(Player.IdleState);
             return;
@@ -40,7 +40,7 @@ public class PlayerMoveState : PlayerGroundedState
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
-        Player.FlipLocalScaleX(Mathf.Sign(Player.playerInput.movementInput.x));
-        Player.rb.velocity = new Vector2(Player.playerInput.movementInput.x * Player.RelativeSpd, Player.rb.velocity.y);
+        Player.FlipLocalScaleX(Mathf.Sign(Player.playerInput.MovementInput.x));
+        Player.rb.velocity = new Vector2(Player.playerInput.MovementInput.x * Player.RelativeSpd, Player.rb.velocity.y);
     }
 }
