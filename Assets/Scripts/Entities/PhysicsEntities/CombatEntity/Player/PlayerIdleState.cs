@@ -13,6 +13,7 @@ public class PlayerIdleState : PlayerGroundedState
     {
         base.Enter();
         Player.rb.velocity = Vector3.zero;
+        Player.transform.GetChild(0).gameObject.SetActive(true);
         Player.animator.SetBool("Idle", true);
         //Player.rb.isKinematic = true;
     }
@@ -32,7 +33,7 @@ public class PlayerIdleState : PlayerGroundedState
             Player.ChangeState(Player.AirBorneState);
             return;
         }
-        else if (Player.playerInput.movementInput.x != 0)
+        else if (Player.playerInput.MovementInput.x != 0)
         {
             Player.ChangeState(Player.MoveState);
             return;

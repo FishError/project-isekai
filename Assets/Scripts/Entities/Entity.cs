@@ -5,6 +5,7 @@ using UnityEngine;
 public class Entity : MonoBehaviour
 {
     public Animator animator;
+    public SpriteRenderer spriteRenderer;
 
     public void FlipLocalScaleX(float x)
     {

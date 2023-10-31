@@ -16,9 +16,19 @@ public abstract class PlayerState : EntityState
 
     public virtual void OnMove(InputAction.CallbackContext value) { }
 
-    public virtual void OnLeftClick(Vector2 mousePos) 
+    public virtual void OnLeftClick(Vector2 mousePos, Vector2 relativeMousePos) 
     {
-        Player.animator.SetFloat("xMouse", mousePos.x - Player.transform.position.x);
-        Player.animator.SetFloat("yMouse", mousePos.y - Player.transform.position.y);
+        SetAnimatorMouseValues(relativeMousePos);
+    }
+
+    public virtual void OnRightClick(Vector2 mousePos, Vector2 relativeMousePos) 
+    {
+        
+    }
+
+    protected void SetAnimatorMouseValues(Vector2 mousePos)
+    {
+        Player.weapon.animator.SetFloat("xMouse", mousePos.x);
+        Player.weapon.animator.SetFloat("yMouse", mousePos.y);
     }
 }

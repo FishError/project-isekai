@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TrainingDummy : CombatEntity
+public class TrainingDummy : SimpleCombatEntity
 {
-    public override void ModifyHP(float amt)
+    public override void ModifyHp(float amt)
     {
-        base.ModifyHP(amt);
+        base.ModifyHp(amt);
         GetComponentInChildren<EntityUIOverlayController>().SetHpBar();
     }
 }

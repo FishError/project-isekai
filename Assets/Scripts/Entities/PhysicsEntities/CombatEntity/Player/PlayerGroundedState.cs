@@ -29,19 +29,19 @@ public class PlayerGroundedState : PlayerState
     public override void OnMove(InputAction.CallbackContext value)
     {
         base.OnMove(value);
-        Player.rb.velocity = new Vector2(Player.playerInput.movementInput.x * Player.RelativeSpd, Player.rb.velocity.y);
+        Player.rb.velocity = new Vector2(Player.playerInput.MovementInput.x * Player.RelativeSpd, Player.rb.velocity.y);
     }
 
     public override void OnJump()
     {
         base.OnJump();
-        Player.velocities.Add(new Vector2(0, 7));
-        Player.playerInput.isJumping = true;
+        Player.Jump();
     }
 
-    public override void OnLeftClick(Vector2 mousePos)
+    public override void OnLeftClick(Vector2 mousePos, Vector2 relativeMousePos)
     {
-        base.OnLeftClick(mousePos);
-        Player.ChangeState(Player.BasicAttackState);
+        base.OnLeftClick(mousePos, relativeMousePos);
+        if (Player.CurrentStm >= 1)
+            Player.ChangeState(Player.BasicAttackState);
     }
 }

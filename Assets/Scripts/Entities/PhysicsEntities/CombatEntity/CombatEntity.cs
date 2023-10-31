@@ -32,11 +32,19 @@ public abstract class CombatEntity : PhysicsEntity
 
     public float RelativeSpd { get; protected set; } = 5;
 
+    public Coroutine HpRegenerationCoroutine { get; protected set; }
+    public Coroutine MpRegenerationCoroutine { get; protected set; }
+    public Coroutine StmRegenerationCoroutine { get; protected set; }
+
     protected override void Start()
     {
         base.Start();
         if (data != null)
             SetBaseStats();
+
+        if (Hp > 0) HpRegenerationSetActive(true);
+        if (Mp > 0) MpRegenerationSetActive(true);
+        if (Stm > 0) StmRegenerationSetActive(true);
 
         if (GetComponentInChildren<EntityUIOverlayController>() != null)
         {
@@ -75,7 +83,7 @@ public abstract class CombatEntity : PhysicsEntity
     {
         float modifiedDmg = dmg - (CurrentDef * (1 - defIgnored));
         if (modifiedDmg > 0)
-            ModifyHP(-modifiedDmg);
+            ModifyHp(-modifiedDmg);
         print(CurrentHp + " / " + Hp);
     }
 
@@ -83,26 +91,47 @@ public abstract class CombatEntity : PhysicsEntity
     {
         float modifiedDmg = dmg - (CurrentRes * (1 - resIgnored));
         if (modifiedDmg > 0)
-            ModifyHP(-modifiedDmg);
+            ModifyHp(-modifiedDmg);
         print(CurrentHp + " / " + Hp);
     }
 
     #region Hp Functions
-    public virtual void ResetHP()
+    public virtual void ResetHp()
     {
         CurrentHp = Hp;
     }
 
-    public virtual void ModifyHP(float amt)
+    public virtual void ModifyHp(float amt)
     {
         CurrentHp += amt;
         if (CurrentHp < 0) CurrentHp = 0;
         else if (CurrentHp > Hp) CurrentHp = Hp;
     }
+
+    public virtual IEnumerator RegenerateHp()
+    {
+        WaitForSeconds waitTime = new WaitForSeconds(1);
+        while (true)
+        {
+            yield return waitTime;
+            if (CurrentHp < Hp)
+            {
+                ModifyHp(Hp * 0.01f);
+            }
+        }
+    }
+
+    public void HpRegenerationSetActive(bool active)
+    {
+        if (active)
+            HpRegenerationCoroutine = StartCoroutine(RegenerateHp());
+        else
+            StopCoroutine(HpRegenerationCoroutine);
+    }
     #endregion
 
     #region Mp Functions
-    public virtual void ResetMP()
+    public virtual void ResetMp()
     {
         CurrentMp = Mp;
     }
@@ -112,6 +141,27 @@ public abstract class CombatEntity : PhysicsEntity
         CurrentMp += amt;
         if (CurrentMp < 0) CurrentMp = 0;
         else if (CurrentMp > Mp) CurrentMp = Mp;
+    }
+
+    public virtual IEnumerator RegenerateMp()
+    {
+        WaitForSeconds waitTime = new WaitForSeconds(1);
+        while (true)
+        {
+            yield return waitTime;
+            if (CurrentMp < Mp)
+            {
+                ModifyMp(Mp * 0.05f);
+            }
+        }
+    }
+
+    public void MpRegenerationSetActive(bool active)
+    {
+        if (active)
+            MpRegenerationCoroutine = StartCoroutine(RegenerateMp());
+        else
+            StopCoroutine(MpRegenerationCoroutine);
     }
     #endregion
 
@@ -126,6 +176,27 @@ public abstract class CombatEntity : PhysicsEntity
         CurrentStm += atm;
         if (CurrentStm < 0) CurrentStm = 0;
         else if (CurrentStm > Stm) CurrentStm = Stm;
+    }
+
+    public virtual IEnumerator RegenerateStm()
+    {
+        WaitForSeconds waitTime = new WaitForSeconds(0.5f);
+        while (true)
+        {
+            yield return waitTime;
+            if (CurrentStm < Stm)
+            {
+                ModifyStm(Stm * 0.1f);
+            }
+        }
+    }
+
+    public void StmRegenerationSetActive(bool active)
+    {
+        if (active)
+            StmRegenerationCoroutine = StartCoroutine(RegenerateStm());
+        else
+            StopCoroutine(StmRegenerationCoroutine);
     }
     #endregion
 
