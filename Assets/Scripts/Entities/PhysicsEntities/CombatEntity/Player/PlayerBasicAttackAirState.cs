@@ -13,6 +13,8 @@ public class PlayerBasicAttackAirState : PlayerAirBorneState
     public override void Enter()
     {
         base.Enter();
+        Player.StmRegenerationSetActive(false);
+        Player.ModifyStm(-1);
         Player.spriteRenderer.enabled = false;
         Player.weapon.SetAnimatorBoolToFalse("Exit");
         Player.weapon.SetAnimatorBoolToTrue("AirAttack");
@@ -38,7 +40,8 @@ public class PlayerBasicAttackAirState : PlayerAirBorneState
 
     public override void Exit() 
     {
-        base.Exit();
+        base.Exit(); 
+        Player.StmRegenerationSetActive(true);
         Player.weapon.animator.Play("Idle");
         Player.weapon.animator.SetBool("Exit", true);
         Player.spriteRenderer.enabled = true;

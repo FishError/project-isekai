@@ -41,6 +41,7 @@ public class PlayerGroundedState : PlayerState
     public override void OnLeftClick(Vector2 mousePos, Vector2 relativeMousePos)
     {
         base.OnLeftClick(mousePos, relativeMousePos);
-        Player.ChangeState(Player.BasicAttackState);
+        if (Player.CurrentStm >= 1)
+            Player.ChangeState(Player.BasicAttackState);
     }
 }

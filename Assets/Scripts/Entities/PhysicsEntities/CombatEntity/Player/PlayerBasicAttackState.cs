@@ -15,9 +15,9 @@ public class PlayerBasicAttackState : PlayerState
     public override void Enter()
     {
         base.Enter();
+        Player.StmRegenerationSetActive(false);
         Player.rb.velocity = Vector2.zero;
         Player.spriteRenderer.enabled = false;
-        Player.FlipLocalScaleX(Mathf.Sign(Player.playerInput.RelativeLeftClickPos.x));
         Player.weapon.SetAnimatorBoolToFalse("Exit");
         if (Player.playerInput.RelativeLeftClickPos.y > Mathf.Abs(Player.playerInput.RelativeLeftClickPos.x))
         {
@@ -31,6 +31,7 @@ public class PlayerBasicAttackState : PlayerState
 
     public override void Exit()
     {
+        Player.StmRegenerationSetActive(true);
         Player.weapon.animator.Play("Idle");
         Player.weapon.animator.SetBool("Exit", true);
         Player.spriteRenderer.enabled = true;
@@ -59,19 +60,23 @@ public class PlayerBasicAttackState : PlayerState
     public override void OnLeftClick(Vector2 mousePos, Vector2 relativeMousePos)
     {
         base.OnLeftClick(mousePos, relativeMousePos);
-        if (relativeMousePos.y > Mathf.Abs(relativeMousePos.x))
+        if (Player.CurrentStm >= 1)
         {
-            Player.weapon.SetAnimatorBoolToTrue("UpAttack");
-        }
-        else
-        {
-            Player.weapon.SetAnimatorBoolToTrue("BasicAttack");
+            if (relativeMousePos.y > Mathf.Abs(relativeMousePos.x))
+            {
+                Player.weapon.SetAnimatorBoolToTrue("UpAttack");
+            }
+            else
+            {
+                Player.weapon.SetAnimatorBoolToTrue("BasicAttack");
+            }
         }
     }
 
     public void OnAnimationEnter()
     {
         Player.FlipLocalScaleX(Mathf.Sign(Player.playerInput.RelativeLeftClickPos.x));
+        Player.ModifyStm(-1);
     }
 
     public void OnAnimationEnd()
