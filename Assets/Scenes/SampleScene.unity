@@ -336,6 +336,7 @@ MonoBehaviour:
   velocities: []
   data: {fileID: 11400000, guid: 8ee1d4ca8e9d94d43ad886e12120dc4c, type: 2}
   lvl: 0
+  Invulnerable: 0
 --- !u!50 &366208961
 Rigidbody2D:
   serializedVersion: 4
@@ -1678,7 +1679,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1488799083
 Transform:
   m_ObjectHideFlags: 0
@@ -1687,7 +1688,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1488799079}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.93, y: 1.09, z: -0.000067174435}
+  m_LocalPosition: {x: -2.53, y: 1.09, z: -0.000067174435}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1716,6 +1717,7 @@ MonoBehaviour:
   velocities: []
   data: {fileID: 11400000, guid: ab6144b102ce7cc4a93e933e62b5955a, type: 2}
   lvl: 0
+  Invulnerable: 0
   target: {fileID: 181881764}
   targetPos: {x: 0, y: 0, z: 0}
   targetDir: {x: 0, y: 0, z: 0}

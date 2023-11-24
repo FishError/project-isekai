@@ -252,6 +252,38 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 45e9276e-3c60-485c-9dcf-68e413d0d84d
     m_ActionName: PlayerControls/RightClick[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4432230099423268255}
+        m_TargetAssemblyTypeName: PlayerInputController, Assembly-CSharp
+        m_MethodName: OnActive1
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: c7d71751-1e38-4e69-aba8-673cebfcc280
+    m_ActionName: PlayerControls/Active1[/Keyboard/1]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4432230099423268255}
+        m_TargetAssemblyTypeName: PlayerInputController, Assembly-CSharp
+        m_MethodName: OnActive2
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: c4f4c002-042d-440e-a099-957a3d0f5135
+    m_ActionName: PlayerControls/Active2[/Keyboard/2]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: PlayerControls
@@ -350,6 +382,7 @@ MonoBehaviour:
   velocities: []
   data: {fileID: 11400000, guid: 88f1ccbf404faac4287ead5db80c6441, type: 2}
   lvl: 0
+  Invulnerable: 0
   playerInput: {fileID: 4432230099423268255}
   weapon: {fileID: 0}
 --- !u!114 &4432230099423268255
@@ -364,15 +397,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65fc1fa6a5e591149ba43eeaa3e13b3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementInput: {x: 0, y: 0, z: 0}
-  jumpInput: 0
-  isJumping: 0
-  jumpHoldStartTime: 0
-  leftClickPos: {x: 0, y: 0}
-  relativeLeftClickPos: {x: 0, y: 0}
-  rightClickPos: {x: 0, y: 0}
-  relativeRightClickPos: {x: 0, y: 0}
-  screenMousePos: {x: 0, y: 0, z: 0}
-  worldMousePos: {x: 0, y: 0}
   player: {fileID: 3154844749504704615}
   playerCamera: {fileID: 0}

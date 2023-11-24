@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Player : ComplexCombatEntity
@@ -10,6 +11,14 @@ public class Player : ComplexCombatEntity
     public PlayerBasicAttackState BasicAttackState { get; private set; }
     public PlayerBasicAttackAirState BasicAttackAirState { get; private set; }
 
+
+    public Active Active1 { get; set; }
+    public Active Active2 { get; set; }
+    public Active Active3 { get; set; }
+    public Active Active4 { get; set; }
+    public Active Active5 { get; set; }
+    public OnJumpSkill OnJumpSkill { get; private set; }
+
     public PlayerInputController playerInput;
 
     public Weapon weapon;
@@ -17,6 +26,8 @@ public class Player : ComplexCombatEntity
     protected override void Start()
     {
         base.Start();
+        OnJumpSkill = new DoubleJump(this);
+        Active1 = new TestActiveSkill(this).Actives.First();
     }
 
     protected override void Update()
