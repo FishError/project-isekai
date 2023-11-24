@@ -14,10 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Hp: 5
   HpGrowthRate: 0.5
+  HpRegenRate: 0
   Mp: 5
   MpGrowthRate: 0.5
+  MpRegenRate: 0
   Stm: 5
   StmGrowthRate: 0.5
+  StmRegenRate: 0.1
   Str: 7
   StrGrowthRate: 0.5
   Mag: 2

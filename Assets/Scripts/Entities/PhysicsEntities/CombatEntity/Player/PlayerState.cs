@@ -12,6 +12,36 @@ public abstract class PlayerState : EntityState
         Player = player;
     }
 
+    public virtual void OnActive1()
+    {
+        if (Player.Active1 != null)
+            Player.Active1.Invoke();
+    }
+
+    public virtual void OnActive2()
+    {
+        if (Player.Active2 != null)
+            Player.Active2.Invoke();
+    }
+
+    public virtual void OnActive3()
+    {
+        if (Player.Active3 != null)
+            Player.Active3.Invoke();
+    }
+
+    public virtual void OnActive4()
+    {
+        if (Player.Active4 != null)
+            Player.Active4.Invoke();
+    }
+
+    public virtual void OnActive5()
+    {
+        if (Player.Active5 != null)
+            Player.Active5.Invoke();
+    }
+
     public virtual void OnJump() { }
 
     public virtual void OnMove(InputAction.CallbackContext value) { }

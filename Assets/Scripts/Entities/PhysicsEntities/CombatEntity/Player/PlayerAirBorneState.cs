@@ -57,6 +57,12 @@ public class PlayerAirBorneState : PlayerState
         Player.rb.velocity = new Vector2(Player.playerInput.MovementInput.x * Player.RelativeSpd, Player.rb.velocity.y);
     }
 
+    public override void OnJump()
+    {
+        base.OnJump();
+        Player.OnJumpSkill.OnJump();
+    }
+
     public override void OnLeftClick(Vector2 mousePos, Vector2 relativeMousePos)
     {
         base.OnLeftClick(mousePos, relativeMousePos);

@@ -10,8 +10,11 @@ public abstract class CombatEntity : PhysicsEntity
 
     #region Base Stats
     public float Hp { get; protected set; }
+    public float HpRegenRate { get; protected set; }
     public float Mp { get; protected set; }
+    public float MpRegenRate { get; protected set; }
     public float Stm { get; protected set; }
+    public float StmRegenRate { get; protected set; }
     public float Str { get; protected set; }
     public float Mag { get; protected set; }
     public float Def { get; protected set; }
@@ -21,8 +24,11 @@ public abstract class CombatEntity : PhysicsEntity
 
     #region Current Stats
     public float CurrentHp { get; protected set; }
+    public float CurrentHpRegenRate { get; protected set; }
     public float CurrentMp { get; protected set; }
+    public float CurrentMpRegenRate { get; protected set; }
     public float CurrentStm { get; protected set; }
+    public float CurrentStmRegenRate { get; protected set; }
     public float CurrentStr { get; protected set; }
     public float CurrentMag { get; protected set; }
     public float CurrentDef { get; protected set; }
@@ -36,6 +42,12 @@ public abstract class CombatEntity : PhysicsEntity
     public Coroutine MpRegenerationCoroutine { get; protected set; }
     public Coroutine StmRegenerationCoroutine { get; protected set; }
 
+    public List<Skill> Skills { get; protected set; }
+
+    //public List<float> Barriers { get; set; }
+
+    public bool Invulnerable;
+
     protected override void Start()
     {
         base.Start();
@@ -46,22 +58,34 @@ public abstract class CombatEntity : PhysicsEntity
         if (Mp > 0) MpRegenerationSetActive(true);
         if (Stm > 0) StmRegenerationSetActive(true);
 
+        Skills = new List<Skill>();
+        StartCoroutine(EnableSkills());
+
         if (GetComponentInChildren<EntityUIOverlayController>() != null)
         {
             GetComponentInChildren<EntityUIOverlayController>().SetValues();
         }
     }
 
+    protected override void Update()
+    {
+        base.Update();
+        SkillEffect();
+    }
+
     protected virtual void SetBaseStats()
     {
         Hp = data.Hp + Mathf.FloorToInt(lvl * data.HpGrowthRate);
         CurrentHp = Hp;
+        CurrentHpRegenRate = data.HpRegenRate;
 
         Mp = data.Mp + Mathf.FloorToInt(lvl * data.MpGrowthRate);
         CurrentMp = Mp;
+        CurrentMpRegenRate = data.MpRegenRate;
 
         Stm = data.Stm + Mathf.FloorToInt(lvl * data.StmGrowthRate);
         CurrentStm = Stm;
+        CurrentStmRegenRate = data.StmRegenRate;
 
         Str = data.Str + Mathf.FloorToInt(lvl * data.StrGrowthRate);
         CurrentStr = Str;
@@ -79,20 +103,34 @@ public abstract class CombatEntity : PhysicsEntity
         CurrentSpd = Spd;
     }
 
-    public virtual void ApplyPhysicalDmg(float dmg, float defIgnored = 0)
+    public void ApplyPhysicalDmg(float dmg, float defIgnored = 0)
     {
-        float modifiedDmg = dmg - (CurrentDef * (1 - defIgnored));
-        if (modifiedDmg > 0)
-            ModifyHp(-modifiedDmg);
-        print(CurrentHp + " / " + Hp);
+        StartCoroutine(ApplyPhysicalDmgEndOfFrame(dmg, defIgnored));
     }
 
-    public virtual void ApplyMagicDmg(float dmg, float resIgnored = 0)
+    protected virtual IEnumerator ApplyPhysicalDmgEndOfFrame(float dmg, float defIgnored = 0)
     {
-        float modifiedDmg = dmg - (CurrentRes * (1 - resIgnored));
-        if (modifiedDmg > 0)
+        yield return new WaitForEndOfFrame();
+        float modifiedDmg = dmg - (CurrentDef * (1 - defIgnored));
+        if (modifiedDmg > 0 && !Invulnerable)
             ModifyHp(-modifiedDmg);
-        print(CurrentHp + " / " + Hp);
+
+        OnTakeDamageSkill(modifiedDmg);
+    }
+
+    public void ApplyMagicDmg(float dmg, float resIgnored = 0)
+    {
+        StartCoroutine(ApplyMagicDmgEndOfFrame(dmg, resIgnored));
+    }
+
+    protected virtual IEnumerator ApplyMagicDmgEndOfFrame(float dmg, float resIgnored = 0)
+    {
+        yield return new WaitForEndOfFrame();
+        float modifiedDmg = dmg - (CurrentRes * (1 - resIgnored));
+        if (modifiedDmg > 0 && !Invulnerable)
+            ModifyHp(-modifiedDmg);
+
+        OnTakeDamageSkill(modifiedDmg);
     }
 
     #region Hp Functions
@@ -106,6 +144,7 @@ public abstract class CombatEntity : PhysicsEntity
         CurrentHp += amt;
         if (CurrentHp < 0) CurrentHp = 0;
         else if (CurrentHp > Hp) CurrentHp = Hp;
+        //print(CurrentHp + " / " + Hp);
     }
 
     public virtual IEnumerator RegenerateHp()
@@ -116,7 +155,7 @@ public abstract class CombatEntity : PhysicsEntity
             yield return waitTime;
             if (CurrentHp < Hp)
             {
-                ModifyHp(Hp * 0.01f);
+                ModifyHp(Hp * CurrentHpRegenRate);
             }
         }
     }
@@ -151,7 +190,7 @@ public abstract class CombatEntity : PhysicsEntity
             yield return waitTime;
             if (CurrentMp < Mp)
             {
-                ModifyMp(Mp * 0.05f);
+                ModifyMp(Mp * CurrentMpRegenRate);
             }
         }
     }
@@ -186,7 +225,7 @@ public abstract class CombatEntity : PhysicsEntity
             yield return waitTime;
             if (CurrentStm < Stm)
             {
-                ModifyStm(Stm * 0.1f);
+                ModifyStm(Stm * CurrentStmRegenRate);
             }
         }
     }
@@ -264,4 +303,29 @@ public abstract class CombatEntity : PhysicsEntity
         if (CurrentSpd < 0) CurrentSpd = 0;
     }
     #endregion
+
+    public IEnumerator EnableSkills()
+    {
+        yield return new WaitForEndOfFrame();
+        for (int i = 0; i < Skills.Count; i++)
+        {
+            Skills[i].EnablePassive();
+        }
+    }
+
+    public void SkillEffect()
+    {
+        for (int i = 0; i < Skills.Count; i++)
+        {
+            Skills[i].Effect();
+        }
+    }
+
+    public void OnTakeDamageSkill(float dmg)
+    {
+        for (int i = 0; i < Skills.Count; i++)
+        {
+            Skills[i].OnTakeDamage(dmg);
+        }
+    }
 }

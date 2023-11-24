@@ -19,13 +19,17 @@ public class PlayerInputController : MonoBehaviour
     public Player player;
     public Camera playerCamera;
 
+    public PlayerState PlayerCurrentState
+    {
+        get { return (PlayerState)player.CurrentState; }
+    }
 
     public void OnMovement(InputAction.CallbackContext value)
     {
         MovementInput = value.ReadValue<Vector2>();
         if (value.performed || value.canceled) 
         {
-            ((PlayerState)player.CurrentState).OnMove(value);
+            PlayerCurrentState.OnMove(value);
         }
     }
 
@@ -33,7 +37,7 @@ public class PlayerInputController : MonoBehaviour
     {
         if (value.performed)
         {
-            ((PlayerState)player.CurrentState).OnJump();
+            PlayerCurrentState.OnJump();
             jumpHoldStartTime = Time.time;
         }
         else if (value.canceled)
@@ -69,7 +73,7 @@ public class PlayerInputController : MonoBehaviour
             screenMousePos.z = -Camera.main.transform.position.z;
             LeftClickPos = Camera.main.ScreenToWorldPoint(screenMousePos);
             RelativeLeftClickPos = LeftClickPos - (Vector2)player.transform.position;
-            ((PlayerState)player.CurrentState).OnLeftClick(LeftClickPos, RelativeLeftClickPos);
+            PlayerCurrentState.OnLeftClick(LeftClickPos, RelativeLeftClickPos);
         }
     }
 
@@ -81,7 +85,47 @@ public class PlayerInputController : MonoBehaviour
             screenMousePos.z = -Camera.main.transform.position.z;
             RightClickPos = Camera.main.ScreenToWorldPoint(screenMousePos);
             RelativeRightClickPos = RightClickPos - (Vector2)player.transform.position;
-            ((PlayerState)player.CurrentState).OnRightClick(RightClickPos, RelativeRightClickPos);
+            PlayerCurrentState.OnRightClick(RightClickPos, RelativeRightClickPos);
+        }
+    }
+
+    public void OnActive1(InputAction.CallbackContext value)
+    {
+        if (value.performed)
+        {
+            PlayerCurrentState.OnActive1();
+        }
+    }
+
+    public void OnActive2(InputAction.CallbackContext value)
+    {
+        if (value.performed)
+        {
+            PlayerCurrentState.OnActive2();
+        }
+    }
+
+    public void OnActive3(InputAction.CallbackContext value)
+    {
+        if (value.performed)
+        {
+            PlayerCurrentState.OnActive4();
+        }
+    }
+
+    public void OnActive4(InputAction.CallbackContext value)
+    {
+        if (value.performed)
+        {
+            PlayerCurrentState.OnActive4();
+        }
+    }
+
+    public void OnActive5(InputAction.CallbackContext value)
+    {
+        if (value.performed)
+        {
+            PlayerCurrentState.OnActive5();
         }
     }
 }
